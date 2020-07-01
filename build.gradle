@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group 'me.kixstar.builders'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url = "https://repo.aikar.co/content/groups/aikar/"
+    }
+    maven {
+        name 'paper'
+        url 'https://papermc.io/repo/repository/maven-public/'
+    }
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'io.papermc:paperlib:1.0.3'
+    compile 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
+    compile 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
+    implementation name: 'Multiverse-Core-4.1.0'
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+shadowJar {
+    relocate 'co.aikar.commands', 'me.kixstar.builders.acf'
+    relocate 'io.papermc.lib', 'me.kixstar.builders.paperlib'
+}
+
+build.dependsOn shadowJar
